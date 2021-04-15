@@ -656,7 +656,7 @@ class EventBus {
   }
 
   off(name, cb) { // 移除某个事件回调队列里的指定回调函数
-    let tasks = this.task[name]
+    let tasks = this.cache[name]
     if (tasks) {
       let index = tasks.indexOf(cb)
       index !== -1 && tasks.splice(index, 1)
