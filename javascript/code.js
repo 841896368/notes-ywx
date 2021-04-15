@@ -636,39 +636,39 @@ function _instanceof(left, right) {
 // Event Bus
 class EventBus {
   constructor() {
-    this.task = {}  // 存储事件与回调之间的对应关系
+    this.cache = {}  // 存储事件与回调之间的对应关系
   }
 
-  on(eventName, cb) { // 用于安装事件监听器，它接受目标事件名和回调函数作为参数
-    if (!this.task[eventName]) {
-      this.task[eventName] = [] // 先检查一下目标事件名有没有对应的监听函数队列, 没有则首先初始化一个监听函数队列
+  on(name, cb) { // 用于安装事件监听器，它接受目标事件名和回调函数作为参数
+    if (!this.cache[name]) {
+      this.cache[name] = [] // 先检查一下目标事件名有没有对应的监听函数队列, 没有则首先初始化一个监听函数队列
     }
-    this.task[eventName].push(cb) // 把回调函数推入目标事件的监听函数队列里去
+    this.task[name].push(cb) // 把回调函数推入目标事件的监听函数队列里去
   }
 
-  emit(eventName, ...args) { // 用于触发目标事件，它接受事件名和监听函数入参作为参数
-    let taskQueue = this.task[eventName]
-    if (taskQueue && taskQueue.length > 0) {
-      taskQueue.forEach(cb => {
+  emit(name, ...args) { // 用于触发目标事件，它接受事件名和监听函数入参作为参数
+    if (this.cache[name]) {
+      let tasks = this.cache[name].slice() // 浅拷贝
+      tasks.forEach(cb => {
         cb(...args) // 逐个调用队列里的回调函数
       })
     }
   }
 
-  off(eventName, cb) { // 移除某个事件回调队列里的指定回调函数
-    let taskQueue = this.task[eventName]
-    if (taskQueue && taskQueue.length > 0) {
-      let index = taskQueue.indexOf(cb)
-      index !== -1 && taskQueue.splice(index, 1)
+  off(name, cb) { // 移除某个事件回调队列里的指定回调函数
+    let tasks = this.task[name]
+    if (tasks) {
+      let index = tasks.indexOf(cb)
+      index !== -1 && tasks.splice(index, 1)
     }
   }
 
-  once(eventName, cb) { // 为事件注册单次监听器
+  once(name, cb) { // 为事件注册单次监听器
     let callback = (...args) => {
       cb(...args)
-      this.off(eventName, callback)
+      this.off(name, callback)
     }
-    this.on(eventName, callback)
+    this.on(name, callback)
   }
 }
 
