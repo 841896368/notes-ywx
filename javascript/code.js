@@ -26,6 +26,7 @@ function deepClone(obj) {
   return obj
 }
 
+// 参数复用、提前返回和 延迟执行
 function currying(fn, ...args) {
   if (args.length >= fn.length) {
     return fn(...args)
