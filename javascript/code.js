@@ -36,6 +36,18 @@ function currying(fn, ...args) {
   }
 }
 
+var foo = function(...args) {
+  var fn = (..._args) => foo(...args, ..._args)
+  fn.getValue = () => args.reduce((pre, cur) => pre + cur)
+  return fn
+}
+
+var f = foo(1,2,3)
+f.getValue() // 6
+
+var f = foo(1)(2)(3)
+f.getValue() // 6
+
 function bigNumAdd(a, b) {
   let maxLength = Math.max(a.length, b.length)
   a = a.padStart(maxlength, '0')
