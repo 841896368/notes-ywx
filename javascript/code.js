@@ -727,3 +727,27 @@ let memoize = function(func) {
   }
 }
 
+function generateRandomWords(n) {
+  let words = 'abcdefghijklmnopqrstuvwxyz你是好的嗯气短前端后端设计产品网但考虑到付款啦分手快乐的分类'
+  let result = ''
+  let len = words.length
+  for (let i = 0; i < n; i++) {
+    result += words[Math.floor(Math.random() * len)]
+  }
+  return result
+}
+
+// 1、懒加载 + 分页
+// 2、虚拟滚动技术
+
+// 虚拟列表是按需显示的一种实现，即只对可见区域进行渲染，对非可见区域中的数据不渲染或部分渲染的技术，从而达到极高的渲染性能
+
+
+// 浏览器的渲染机制
+// 1、解析HTML，生成DOM树，解析CSS，生成CSSOM树
+// 2、将DOM树和CSSOM树结合，生成渲染树(Render Tree)
+// 3、Layout(回流):根据生成的渲染树，进行回流(Layout)，得到节点的几何信息（位置，大小）
+// 4、Painting(重绘):根据渲染树以及回流得到的几何信息，得到节点的绝对像素
+// 5、Display:将像素发送给GPU，展示在页面上。
+
+
