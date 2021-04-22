@@ -751,3 +751,205 @@ function generateRandomWords(n) {
 // 5、Display:将像素发送给GPU，展示在页面上。
 
 
+Array.prototype.reduce = function (callback, pre) {
+  if (typeof callback !== 'function') {
+    throw '必须为函数'
+  }
+  if (!Array.isArray(this)) {
+    throw '必须为数组'
+  }
+  let index = 0
+  if (!pre) {
+    index = 1
+    pre = this[0]
+  }
+  for (; index < this.length; index++) {
+    pre = callback(pre, this[index], index, this)
+  }
+  return pre
+}
+
+// 二分查找 时间复杂度 O(logn)
+function binarySearch(arr, key) {
+  let low = 0
+  let high = arr.length - 1
+  while (low <= high) {
+    let mid = Math.floor((low + high) / 2)
+    if (key === arr[mid]) {
+      return mid
+    } else if (key > arr[mid]) {
+      low = mid + 1
+    } else {
+      high = mid - 1
+    }
+  }
+  return -1
+}
+
+function binarySearch(arr, low, high, key) {
+  if (low > high) {
+    return -1
+  }
+  let mid = Math.floor((low + high) / 2)
+  if (key === arr[mid]) {
+    return mid
+  } else if (key < arr[mid]) {
+    high = mid - 1
+    return binarySearch(arr, low, high, key)
+  } else if (key > arr[mid]) {
+    low = mid + 1
+    return binarySearch(arr, low, high, key)
+  }
+}
+
+// 链表
+class Node {
+  constructor(key) {
+    this.next = null
+    this.key = key
+  }
+}
+
+class List {
+  constructor() {
+    this.head = null // 每个链表都有一个头指针，指向第一个节点，没节点则指向NULL
+  }
+  // 创建节点
+  static createNode() {
+    return new Node(key)
+  }
+  // 插入节点
+  insert(node) {
+    if (this.head) {
+      node.next = this.head
+    } else {
+      node.next = null
+    }
+    this.head = node
+  }
+  // 搜索节点
+  find(key) {
+    let node = this.head
+    while (node !== null && node.key !== key) {
+      node = node.next
+    }
+    return node
+  }
+  // 删除节点
+  delete(node) {
+    if (node === this.head) {
+      this.head = node.next
+      return
+    }
+    // 查找所要删除节点的上一个节点
+    let prevNode = this.head
+    while (prevNode.next !== node) {
+      prevNode = prevNode.next
+    }
+
+    if (node.next === null) {
+      prevNode.next = null
+    }
+
+    if (node.next) {
+      prevNode.next = node.next
+    }
+  }
+}
+
+// 反转链表
+const reverseList = function(head) {
+  let prev = null
+  let cur = head
+  while (cur) {
+    const next = cur.next
+    cur.next = prev
+    prev = cur
+    cur = next
+  }
+  return prev
+}
+
+// 斐波那契数列, 时间复杂度 O(n)
+const fib = function(n) {
+  let a = 0
+  let b = 1
+  while (n > 0) {
+    [a, b] = [b, a + b]
+    n--
+  }
+  return a
+}
+
+// 时间复杂度 O(n^2)
+const fib = function(n) {
+  if (n <= 1) {
+    return n
+  }
+  return fib(n - 1) + fib(n - 2)
+}
+
+// 尾递归，在递归过程中，直接把计算结果作为参数传入到递归方法中，也就是说，递归过程中不需要保存之前的计算值, 时间复杂度 O(n)
+const fib = function(n, a = 0, b = 1) {
+  if (n < 1) {
+    return a
+  }
+  return fib(n - 1, b, a + b)
+}
+
+// LRU缓存机制 Least Recently Used的缩写，即最近最少使用
+// 选择最近最久未使用的页面予以淘汰。该算法赋予每个页面一个访问字段，用来记录一个页面自上次被访问以来
+// 所经历的时间 t，当须淘汰一个页面时，选择现有页面中其t 值最大的，即最近最少使用的页面予以淘汰。
+class LRUCache {
+  constructor(capacity) {
+    this.capacity = capacity // 容量
+    this.cache = new Map()
+  }
+  get(key) {
+    if (this.cache.has(key)) {
+      const temp = this.cache.get(key)
+      this.cache.delete(key)
+      this.cache.set(key, temp)
+      return temp
+    }
+    return -1
+  }
+  set(key, value) {
+    if (this.cache.has(key)) { // key存在，仅修改值
+      this.cache.delete(key)
+      this.cache.set(key, value)
+    } else if (this.cache.size < this.capacity) { // key不存在，cache未满
+      this.cache.set(key, value)
+    } else { // 添加新key，删除map的第一个元素，即为最长未使用的
+      // Set、Map 的遍历顺序就是插入顺序 Map.prototype.keys() 返回键名遍历器 MapIterator.next()返回 {value: xxx, done: false}
+      this.cache.delete(this.cache.keys().next().value) 
+      this.cache.set(key, value)
+    }
+  }
+}
+
+// vue
+// 1、Vue生命周期、vue生态、vue-router 基础原理、vue-router（router 404页面的配置）
+// 2、vue双向绑定原理：Object.defineProperty，发布订阅模式 ，promise ，finally v-model 加到自定义组件。怎么做 ref 放在组件，vue nextTick 原理、大列表处理，事件委托方法
+// 3、vuex ：event_bus 是否使用过，vue 组件库
+// 4、基本组件间数据通信的方式、Vue中父子组件之间更新流程、动态组件、v-model 、http状态码、协商缓存、js基础API 
+// 5、computed与watch的区别、vue created 和 mounted 顺序、
+// 6、修饰符、自定义指令、slot、，vuex,指令、mixin，常用命令的工作原理、
+// 7、vue几个拔高的问题，比如虚拟dom，diff算法简介等
+// 8、工具类：webpack、git使用是否只会基本的拉取
+// js
+// 9、服务端渲染
+// 10、异步请求：值传递和引用传递、es5 this指向
+// 13、var和let的区别，为什么会有这样的区别
+// 14、js数据类型，值类型、引用类型
+// 15、冒泡、冒泡排序流程、代码流程、 原型链、闭包是什么、如何处理闭包、es6.浏览器控制台常见报错是否认识，请求错误码有哪些、组件封装，前端安全
+// 16、js基础：基本的GET/POST请求的差异、Promise的很多方法及原理
+// 17、前端缓存说出localstorage，sessionstorage，cookie的区别
+// 18、js原型链如何实现继承、事件循环机制、异步机制
+// 19、ES6 promise是否用过，JS模块化的理解，defer和async的区别----考知识领域拓展 
+// 20、setTimeout 的执行，主线程和异步线程
+// 22、CSS：基本的CSS选择器优先级、 css3动画放大，旋转，移动相关属性、动画性能优化、弹性盒布局、css如何处理 1px 问题，是否知道动画做 js
+// 23、CSS：移动端：刘海屏适配规则、position基本概念、Positon的几种参数、fix深入理解（fix的低端浏览器兼容问题，使用JS进行模拟fix的思路）
+// 24、网页布局模式、浏览器渲染模式、重绘和重排的概念
+
+
