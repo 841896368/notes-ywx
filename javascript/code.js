@@ -615,12 +615,13 @@ Function.prototype.myApply = function(context, args = []) {
 Function.prototype.myBind = function(context, ...args) {
   context = context || window
   let self = this
-  return function F(..._args) {
-    if (this instanceof F) {
+  let bound = function(..._args) {
+    if (this instanceof bound) {
       return new self(...args, ..._args)
     }
     return self.apply(context, args.concat(_args))
   }
+  return bound
 }
 
 
