@@ -134,15 +134,16 @@ function throttle(func, delay) {
 
 // 方法3:时间戳与定时器结合
 function throttle(func, delay) {
+  let timeout
   let start = Date.now()
   return function() {
     let now = Date.now()
-    let remainTime = delay - (now - start)
-    if (remainTime <= 0) {
+    clearTimeout(timeout)
+    if (now - start >= delay) {
       func.apply(this, arguments)
-      start = Date.now()
+      start = now
     } else {
-      setTimeout(() => {
+      timeout = setTimeout(() => {
         func.apply(this, arguments)
       }, remainTime)
     }
