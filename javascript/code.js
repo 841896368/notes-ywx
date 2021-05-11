@@ -930,6 +930,31 @@ class LRUCache {
   }
 }
 
+
+// 给定两个数组，写一个方法来计算它们的交集。
+// 例如：给定 nums1 = [1, 2, 2, 1]，nums2 = [2, 2]，返回 [2, 2]。
+
+// 时间复杂度O(m + n) m为nums1长度，n为nums2长度
+const intersect = function(nums1, nums2) {
+  const map = {}
+  const res = []
+  for (let n of nums1) {
+    if (map[n]) {
+      map[n]++
+    } else {
+      map[n] = 1
+    }
+  }
+  for (let n of nums2) {
+    if (map[n] > 0) {
+      res.push(n)
+      map[n]--
+    }
+  }
+  return res
+}
+
+
 // vue
 // 1、Vue生命周期、vue生态、vue-router 基础原理、vue-router（router 404页面的配置）
 // 2、vue双向绑定原理：Object.defineProperty，发布订阅模式 ，promise ，finally v-model 加到自定义组件。怎么做 ref 放在组件，vue nextTick 原理、大列表处理，事件委托方法
